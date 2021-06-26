@@ -1,8 +1,8 @@
 # Eki Indradi monitoring Confluent Config 
 
-# Research & development 2021
+Research & development 2021
 
-# Cnfluent 6 monitoring - Prometheus & Grafana  - Multi JMX_EXPORTER :
+# Confluent 6 monitoring - Prometheus & Grafana  - Multi JMX_EXPORTER :
 
 ini adalah rangkuman dari penelitian saya yang berhasil untuk monitoring 
 confluent 6 kafka server menggunakan prometheus dan grafana dengan bantuan jmx exporter
