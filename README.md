@@ -12,7 +12,7 @@ orang bule pun belum ada yang share untuk monitoring ini (dengan sempurna)
 jujur ini sangat mahal, karena waktu riset saya cukup lama 
 
 
-# CONFLUENT SERVER CONFIG
+# === CONFLUENT SERVER CONFIG
 
 system requirement : 
 
@@ -52,6 +52,16 @@ curl -L -o openjdk-11.0.2_linux-x64_bin.tar.gz https://download.java.net/java/GA
 
 untuk tutorial multi java 11 dapat di lihat pada :
 
+https://github.com/EKI-INDRADI/eki-latihan-multi-java-ubuntu-server-1804-lts
+
+
+
+
+
+
+
+
+
 
 Note : kenapa multi java ? karena setiap agent service dari JMX_EXPORTER membutuhkan 1 jvm, 
 
@@ -62,7 +72,7 @@ untuk mengeluarkan metrics prometheus, jika di gabung semua service JMX_EXPORTER
 
 di ibaratkan keperluan sebagai berikut : 
 
-https://github.com/EKI-INDRADI/eki-latihan-multi-java-ubuntu-server-1804-lts
+
 
 
 apt-get install default-jdk -> untuk control center
@@ -97,7 +107,7 @@ https://github.com/prometheus/jmx_exporter/tree/master/example_configs
 3. Run Confluent (confluent local services start)
 
 
-# / CONFLUENT SERVER CONFIG
+# === / CONFLUENT SERVER CONFIG
 
 
 
@@ -106,7 +116,7 @@ https://github.com/prometheus/jmx_exporter/tree/master/example_configs
 
 
 
-# PROMETHEUS SERVER CONFIG
+# === PROMETHEUS SERVER CONFIG
 
 system requirement :
 
@@ -163,7 +173,7 @@ sudo systemctl status grafana-server
 config GUI metrics :  /prometheus/metrics-monitoring.txt
 
 
-# / PROMETHEUS SERVER CONFIG
+# === / PROMETHEUS SERVER CONFIG
 
 
 
@@ -175,7 +185,7 @@ config GUI metrics :  /prometheus/metrics-monitoring.txt
 
 
 
-# Research & Development
+# === Research & Development
 
 --- Prometheus Server :
 
@@ -197,7 +207,7 @@ Control Center : http://<YOUR_IP>:9021/
 
 
 
-# / Research & Development
+# === / Research & Development
 
 
 
