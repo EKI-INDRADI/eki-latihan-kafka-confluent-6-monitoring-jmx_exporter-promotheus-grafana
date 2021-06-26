@@ -1,0 +1,503 @@
+
+
+
+
+ssh <YOUR_USERNAME>@<YOUR_IP_X> -p
+
+sudo useradd -m ngx<YOUR_USERNAME>  << bkin account + home dir
+sudo usermod -s /bin/bash ngx<YOUR_USERNAME>  << biar bs login
+usermod -a -Gsudo ngx<YOUR_USERNAME>  << enable root
+sudo passwd ngx<YOUR_USERNAME>  << ubah pass
+<YOUR_PASSWORD>
+
+
+
+mkdir /home/HOME_DL
+chmod 777 -Rv  /home/HOME_DL
+cd /home/HOME_DL
+wget https://github.com/prometheus/prometheus/releases/download/v2.24.0/prometheus-2.24.0.linux-amd64.tar.gz
+
+===========x==========
+tar xvfz prometheus-*.tar.gz
+cd prometheus-*
+====================
+
+tar xvfz prometheus-2.24.0.linux-amd64.tar.gz
+mv prometheus-2.24.0.linux-amd64.tar.gz prometheus-files
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+========================PROMETHEUS 
+https://computingforgeeks.com/install-prometheus-server-on-debian-ubuntu-linux/#:~:text=Install%20Prometheus%20Server%20on%20Ubuntu%2020.04%2F18.04%20%7C%20Debian%2010%2F9,-By&text=Prometheus%20is%20a%20monitoring%20tool,for%20higher%20performance%20and%20scalability.
+https://devopscube.com/install-configure-prometheus-linux/
+
+====Create Prometheus system group
+sudo groupadd --system prometheus
+sudo useradd -s /sbin/nologin --system -g prometheus prometheus
+
+====Create data & configs directories for Prometheus
+----primary configuration files directory is /etc/prometheus/. 
+sudo mkdir /var/lib/prometheus
+for i in rules rules.d files_sd; do sudo mkdir -p /etc/prometheus/${i}; 
+done
+
+
+==== Download Prometheus
+sudo apt-get update
+sudo apt-get install curl nano
+
+
+mkdir -p /tmp/prometheus && cd /tmp/prometheus
+------- or
+mkdir -p /home/HOME_DL && chmod 777 -Rv  /home/HOME_DL && cd /home/HOME_DL
+
+curl -s https://api.github.com/repos/prometheus/prometheus/releases/latest | grep browser_download_url | grep linux-amd64 | cut -d '"' -f 4 | wget -qi -
+------- or
+wget https://github.com/prometheus/prometheus/releases/download/v2.24.0/prometheus-2.24.0.linux-amd64.tar.gz
+
+cd /home/HOME_DL
+
+tar xvfz prometheus-2.24.0.linux-amd64.tar.gz
+
+sudo mv prometheus-2.24.0.linux-amd64 prometheus-files && cd prometheus-files
+
+sudo mv prometheus promtool /usr/local/bin/
+prometheus --version
+promtool --version
+sudo mv prometheus.yml /etc/prometheus/prometheus.yml
+sudo mv consoles/ console_libraries/ /etc/prometheus/
+
+==== Configure Prometheus on Debian / Ubuntu
+sudo nano /etc/prometheus/prometheus.yml
+
+
+==== Create a Prometheus systemd Service unit file
+
+sudo tee /etc/systemd/system/prometheus.service<<EOF
+[Unit]
+Description=Prometheus
+Documentation=https://prometheus.io/docs/introduction/overview/
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=prometheus
+Group=prometheus
+ExecReload=/bin/kill -HUP \$MAINPID
+ExecStart=/usr/local/bin/prometheus \
+  --config.file=/etc/prometheus/prometheus.yml \
+  --storage.tsdb.path=/var/lib/prometheus \
+  --web.console.templates=/etc/prometheus/consoles \
+  --web.console.libraries=/etc/prometheus/console_libraries \
+  --web.listen-address=0.0.0.0:9090 \
+  --web.external-url=
+
+SyslogIdentifier=prometheus
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+
+==== Change directory permissions.
+for i in rules rules.d files_sd; do sudo chown -R prometheus:prometheus /etc/prometheus/${i}; done
+for i in rules rules.d files_sd; do sudo chmod -R 775 /etc/prometheus/${i}; done
+sudo chown -R prometheus:prometheus /var/lib/prometheus/
+
+==== Reload systemd daemon and start the service:
+
+sudo systemctl daemon-reload
+sudo systemctl start prometheus
+sudo systemctl enable prometheus
+
+systemctl status prometheus
+
+
+==== Reload systemd daemon and start the service:
+sudo ufw allow 9090/tcp
+-- or
+sudo ufw disable
+
+
+
+==== Reload systemd daemon and start the service:
+sudo systemctl start prometheus
+http://<YOUR_IP_X>:9090/graph
+
+========================PROMETHEUS 
+
+========================PROMETHEUS  NODE EXPORTER
+https://devopscube.com/monitor-linux-servers-prometheus-node-exporter/
+
+====Setup Node Exporter Binary
+cd /home/HOME_DL
+curl -LO https://github.com/prometheus/node_exporter/releases/download/v1.0.1/node_exporter-1.0.1.linux-amd64.tar.gz
+
+tar xvfz node_exporter-1.0.1.linux-amd64.tar.gz
+
+sudo mv node_exporter-1.0.1.linux-amd64 prometheus-node_exporter-files && cd prometheus-node_exporter-files
+cd ..
+
+cp -avr prometheus-node_exporter-files/node_exporter /usr/local/bin/
+
+====Create a Custom Node Exporter Service
+--Create a node_exporter user to run the node exporter service.
+sudo useradd -rs /bin/false node_exporter
+
+--Create a node_exporter service file under systemd.
+nano /etc/systemd/system/node_exporter.service
+
+--Add the following service file content to the service file and save it.
+[Unit]
+Description=Node Exporter
+After=network.target
+
+[Service]
+User=node_exporter
+Group=node_exporter
+Type=simple
+ExecStart=/usr/local/bin/node_exporter
+
+[Install]
+WantedBy=multi-user.target
+
+
+
+--Reload the system daemon and star the node exporter service.
+sudo systemctl daemon-reload
+sudo systemctl start node_exporter
+
+--check the node exporter status to make sure it is running in the active state.
+sudo systemctl status node_exporter
+
+--Enable the node exporter service to the system startup.
+sudo systemctl enable node_exporter
+
+--Now, node exporter would be exporting metrics on port 9100. 
+http://<YOUR_IP_X>:9100/metrics
+
+
+
+
+===Configure the Server as Target on Prometheus Server
+
+nano /etc/prometheus/prometheus.yml
+
+
+---- pastikan rapih sesuai urutan
+- job_name: 'node_exporter_metrics'
+  scrape_interval: 5s
+  static_configs:
+    - targets: ['<YOUR_IP_X>:9100']
+
+- job_name: 'node_exporter_metrics_bwx_126'
+  scrape_interval: 5s
+  static_configs:
+    - targets: ['45.80.181.126:9100']
+
+--Restart the prometheus service for the configuration changes to take place.
+
+sudo systemctl restart prometheus
+
+http://<YOUR_IP_X>:9090/targets
+
+--Following are the few key node metrics you can use to find its statistics.
+node_memory_MemFree_bytes
+node_cpu_seconds_total
+node_filesystem_avail_bytes
+rate(node_cpu_seconds_total{mode="system"}[1m]) 
+rate(node_network_receive_bytes_total[1m])
+
+========================PROMETHEUS  NODE EXPORTER
+
+
+========================MARIADB
+mkdir -p /home/DOCKER_FILES
+mkdir -p /home/DOCKER_FILES/pma_grafana_8080  x
+mkdir -p /home/DOCKER_FILES/pma_3400_8800  <<< MYSQL UTAMA
+mkdir -p /home/DOCKER_FILES/pma_3401_8801
+mkdir -p /home/DOCKER_FILES/pma_3402_8802 x
+
+cd /home/DOCKER_FILES/pma_3400_8800
+nano /home/DOCKER_FILES/pma_3400_8800/docker-compose.yml
+-----------------------------
+version: '3.1'
+
+services:
+  db:
+    image: mariadb:10.3
+    restart: always
+    ports:
+      - 3400:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: <YOUR_PASSWORD>
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8800:80
+    environment:
+      - PMA_ARBITRARY=1
+
+-----------------------------
+nano /home/DOCKER_FILES/pma_3401_8801/docker-compose.yml
+
+version: '3.1'
+
+services:
+  db:
+    image: mariadb:10.3
+    restart: always
+    ports:
+      - 3401:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: <YOUR_PASSWORD>
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8801:80
+    environment:
+      - PMA_ARBITRARY=1
+
+
+version: '3.1'
+
+services:
+  db:
+    image: mariadb:10.3
+    restart: always
+    ports:
+      - 3402:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: <YOUR_PASSWORD>
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8802:80
+    environment:
+      - PMA_ARBITRARY=1
+
+
+-----------------------------
+docker-compose up -d
+docker-compose down
+docker-compose start
+docker-compose stop
+
+========================MARIADB
+
+
+
+========================PROMETHEUS  MYSQLD EXPORTER
+https://computingforgeeks.com/install-and-configure-prometheus-mysql-exporter-on-ubuntu-centos/
+
+groupadd --system mysqld_exporter
+useradd -s /bin/false -r -g mysqld_exporter mysqld_exporter
+
+
+sudo groupadd --system prometheus
+sudo useradd -s /sbin/nologin --system -g prometheus prometheus
+
+
+cd /home/HOME_DL
+curl -LO https://github.com/prometheus/mysqld_exporter/releases/download/v0.12.1/mysqld_exporter-0.12.1.linux-amd64.tar.gz
+
+tar xvfz mysqld_exporter-0.12.1.linux-amd64.tar.gz
+
+sudo mv mysqld_exporter-0.12.1.linux-amd64 prometheus-mysqld_exporter-files && cd prometheus-mysqld_exporter-files
+chmod +x mysqld_exporter
+chmod +x /usr/local/bin/mysqld_exporter
+
+cp -avr /home/HOME_DL/prometheus-mysqld_exporter-files/mysqld_exporter /usr/local/bin/
+
+mysqld_exporter --version
+
+
+
+
+
+
+
+
+
+==== Create Prometheus exporter database user (HANYA BIKIN DI MYSQL UTAMA)
+
+CREATE USER 'mysqld_exporter'@'%' IDENTIFIED BY '<YOUR_PASSWORD>' WITH MAX_USER_CONNECTIONS 3;
+
+GRANT PROCESS, REPLICATION CLIENT, SELECT ON *.* TO 'mysqld_exporter'@'%';
+
+FLUSH PRIVILEGES;
+--EXIT
+
+
+check di phpmyadmin
+============================================
+
+
+https://iamabhishek-dubey.medium.com/setting-up-mysql-monitoring-with-prometheus-6029cec87db0
+https://techexpert.tips/prometheus/prometheus-monitoring-mysql-ubuntu-linux/
+
+
+==== Configure database credentials
+https://dzone.com/articles/how-to-monitor-mysql-deployments-with-prometheus-a
+
+nano /etc/.mysqld_exporter.cnf
+
+[client]
+user=mysqld_exporter
+password=<YOUR_PASSWORD>
+host=<YOUR_IP_X>    <<<================================== ip perlu di set
+port=3400
+
+
+
+chown root:prometheus /etc/.mysqld_exporter.cnf
+
+
+nano /etc/systemd/system/mysql_exporter.service
+
+[Unit]
+Description=Prometheus MySQL Exporter
+After=network.target
+User=prometheus
+Group=prometheus
+
+[Service]
+Type=simple
+Restart=always
+Environment="DATA_SOURCE_NAME=mysqld_exporter:<YOUR_PASSWORD>@tcp(<YOUR_IP_X>:3400)"
+ExecStart=/usr/local/bin/mysqld_exporter \
+--config.my-cnf /etc/.mysqld_exporter.cnf \
+--collect.global_status \
+--collect.info_schema.innodb_metrics \
+--collect.auto_increment.columns \
+--collect.info_schema.processlist \
+--collect.binlog_size \
+--collect.info_schema.tablestats \
+--collect.global_variables \
+--collect.info_schema.query_response_time \
+--collect.info_schema.userstats \
+--collect.info_schema.tables \
+--collect.perf_schema.tablelocks \
+--collect.perf_schema.file_events \
+--collect.perf_schema.eventswaits \
+--collect.perf_schema.indexiowaits \
+--collect.perf_schema.tableiowaits \
+--collect.slave_status \
+--web.listen-address=0.0.0.0:9104
+
+[Install]
+WantedBy=multi-user.target
+
+============ 
+sudo systemctl daemon-reload
+sudo systemctl enable mysql_exporter
+sudo systemctl start mysql_exporter
+
+-- sudo systemctl disable mysql_exporter
+-- sudo systemctl stop mysql_exporter
+
+sudo systemctl restart mysql_exporter
+
+sudo systemctl status mysql_exporter
+
+nano /etc/prometheus/prometheus.yml
+
+ - job_name: 'mysqld_exporter docker'
+    static_configs:
+      - targets: ['127.0.0.1:9104']
+
+
+sudo systemctl daemon-reload
+sudo systemctl restart prometheus
+sudo systemctl status prometheus
+
+https://computingforgeeks.com/monitoring-mysql-mariadb-with-prometheus-in-five-minutes/
+========================PROMETHEUS  MYSQLD EXPORTER
+========================GRAFANA
+https://grafana.com/docs/grafana/latest/installation/debian/
+
+Grafana OSS	grafana	https://packages.grafana.com/oss/deb stable main
+
+
+
+
+
+sudo apt-get install -y apt-transport-https
+sudo apt-get install -y software-properties-common wget
+wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -
+echo "deb https://packages.grafana.com/oss/deb stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
+sudo apt-get update
+sudo apt-get install grafana
+
+
+sudo systemctl daemon-reload
+sudo systemctl start grafana-server
+sudo systemctl status grafana-server
+
+
+http://<YOUR_IP_X>:3000/
+default user : admin
+default password : admin
+
+
+change passs : <YOUR_PASSWORD>
+
+
+https://prometheus.io/docs/visualization/grafana/
+
+node_memory_MemFree_bytes
+node_cpu_seconds_total
+node_filesystem_avail_bytes
+rate(node_cpu_seconds_total{mode="system"}[1m]) 
+rate(node_network_receive_bytes_total[1m])
+
+========================GRAFANA
+
+
+
+
+nano /etc/prometheus/prometheus.yml
+
+  - job_name: 'jmx_exporter kafka'
+    static_configs:
+    - targets: ['192.168.100.35:8181']
+
+  - job_name: 'jmx_exporter zookeeper'
+    static_configs:
+    - targets: ['192.168.100.35:8282']
+
+
+sudo systemctl daemon-reload
+sudo systemctl restart prometheus
+sudo systemctl status prometheus
+
+buka target
+
+
+
+https://dzone.com/articles/kafka-monitoring-via-prometheus-amp-grafana
+
+
+
+jvm_memory_bytes_used{job="jmx_exporter kafka",instance="192.168.100.35:8181"}
+process_cpu_seconds_total{job="jmx_exporter kafka",instance="192.168.100.35:8181"}
+rate(process_cpu_seconds_total{job="jmx_exporter kafka",instance="192.168.100.35:8181"} [5m])

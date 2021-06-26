@@ -1,0 +1,221 @@
+Panel title : [NODE_2] DISK USAGE LINUX CONFLUENT SERVER
+Metrics : node_filesystem_avail_bytes{device="/dev/ploop26458p1",fstype="ext4",instance="<YOUR_IP_XXX>:9100",job="node_exporter_server_confluent",mountpoint="/"}
+Format : Time series
+Visualization : Guage
+Field Display name :  bytes(SI)
+
+Panel title : [NODE_2] NETWORK LINUX CONFLUENT SERVER
+Metrics : rate(node_network_receive_bytes_total{instance="<YOUR_IP_XXX>:9100", job="node_exporter_server_confluent"}[1m])
+Format : Time series
+Visualization : Graph
+Field Display name : ${__field.labels.device}
+Unit : bytes/sec(SI)
+
+Panel title : [NODE_2] CPU USAGE - LINUX CONFLUENT SERVER
+Metrics : sum(irate(node_cpu_seconds_total{job="node_exporter_server_confluent",mode="system"}[1m])) * 100
+Format : Time series
+Visualization : Bar guage
+Field Display name :  Core : ${__field.labels.cpu}
+Unit : Percent(0-100)
+
+Panel title : [NODE_2] CPU USAGE - LINUX CONFLUENT SERVER
+Metrics new : sum(irate(node_cpu_seconds_total{job="node_exporter_server_confluent",mode="system"}[1m])) * 100
+Format : Time series
+Visualization : Graph
+Field Display name : 
+Unit : Percent(0-100)
+
+Panel title : [NODE_2] CPU (4 CORE) USAGE LINUX CONFLUENT SERVER [MAINTENANCE]
+#Metrics old : rate(node_cpu_seconds_total{job="node_exporter_server_confluent",mode="system"}[1m]) * 10
+(irate(node_cpu_seconds_total{job="node_exporter_server_confluent",instance="<YOUR_IP_XXX>:9100",mode="system"}[1m])) * 100
+(irate(node_cpu_seconds_total{job="node_exporter_server_confluent",mode="system"}[1m]) * 100 ) 
+Metrics new : (rate(node_cpu_seconds_total{job="node_exporter_server_confluent",mode="system"}[1m]) * 100 ) / 4
+Format : Time series
+Visualization : Bar guage
+Field Display name :  Core : ${__field.labels.cpu}
+Unit : Percent(0.0-1.0)
+
+
+Panel title : [JMX_2] CONFLUENT KAFKA ONLY CPU USAGE
+#Metrics old : rate(node_cpu_seconds_total{job="node_exporter_server_confluent",mode="system"}[1m]) * 10
+Metrics : sum(rate(process_cpu_seconds_total{job="jmx_exporter_kafka",instance="<YOUR_IP_XXX>:8282"}[1m])) / sum(count(node_cpu_seconds_total{job="node_exporter_server_confluent",mode="system"})) * 100
+Metrics new :sum(rate(process_cpu_seconds_total{job="jmx_exporter_kafka",instance="<YOUR_IP_XXX>:8282"}[1m])) / sum(count(node_cpu_seconds_total{job="node_exporter_server_confluent",mode="system"})) * 100
+Format : Time series
+Visualization : Graph
+Field Display name : 
+Unit : Percent(0-100)
+
+Panel title : [JMX_2] CONFLUENT KAFKA MEMORY USED
+Metrics : jvm_memory_bytes_used{job="jmx_exporter_kafka",instance="<YOUR_IP_XXX>:8282"}
+Format : Time series
+Visualization : Graph
+Field Display name : ${__field.labels.area}
+Unit : bytes(SI)
+
+Panel title : [JMX_2] NETWORK METADATA KAFKA TOTAL REQUEST
+Metrics : kafka_network_requestmetrics_requests_total{instance="<YOUR_IP_XXX>:8282",job="jmx_exporter_kafka",request="Metadata",version="9"}
+Format : Time series
+Visualization : Stat
+Field Display name : METADATA KAFKA REQUEST
+Unit : 
+
+Panel title : [JMX_2] NETWORK KAFKA PRODUCER TOTAL REQUEST
+Metrics : kafka_network_requestmetrics_requests_total{instance="<YOUR_IP_XXX>:8282",job="jmx_exporter_kafka",request="Produce",version="8"}
+Format : Time series
+Visualization : Stat
+Field Display name : KAFKA REQUEST
+Unit : 
+
+Panel title : [JMX_2] NETWORK KAFKA CONSUMER TOTAL REQUEST
+Metrics : kafka_network_requestmetrics_requests_total{instance="<YOUR_IP_XXX>:8282",job="jmx_exporter_kafka",request="FetchConsumer",version="11"}
+Format : Time series
+Visualization : Stat
+Field Display name : CONSUMER REQUEST
+Unit : 
+
+
+
+
+
+Panel title : [JMX_2] KAFKA PARTITIONS
+Metrics : kafka_controller_kafkacontroller_globalpartitioncount{instance="<YOUR_IP_XXX>:8282",job="jmx_exporter_kafka"}
+Format : Time series
+Visualization : Stat
+Graph mode : none
+Field Display name : 
+Unit : 
+
+
+Panel title : [NODE_2] NETWORK ICMP ERROR  - LINUX CONFLUENT SERVER
+Metrics : node_netstat_Icmp_InErrors{instance="<YOUR_IP_XXX>:9100",job="node_exporter_server_confluent"}
+Format : Time series
+Visualization : Stat
+Graph mode : none
+Field Display name :  FAIL CONNECTION (LOSS)
+Unit : 
+
+Panel title : [JMX_1] ZOOKEEPER DATA SIZE
+Metrics : zookeeper_DataDirSize{instance="<YOUR_IP_XXX>:8181",job="jmx_exporter_zookeeper"}
+Format : Time series
+Visualization : Stat
+Graph mode : area
+Field Display name :  
+Unit : bytes(SI)
+
+
+Panel title : [NODE_2] FREE SWAP - LINUX CONFLUENT SERVER
+Metrics : node_memory_SwapFree_bytes{instance="<YOUR_IP_XXX>:9100",job="node_exporter_server_confluent"}
+Format : Time series
+Visualization : Stat
+Graph mode : area
+Field Display name :  
+Unit : bytes(SI)
+
+Panel title : [NODE_2] FREE RAM - LINUX CONFLUENT SERVER
+Metrics : node_memory_MemAvailable_bytes{instance="<YOUR_IP_XXX>:9100",job="node_exporter_server_confluent"}
+Format : Time series
+Visualization : Stat
+Graph mode : area
+Field Display name :  
+Unit : bytes(SI)
+
+Panel title : [JMX_1] ZOOKEEPER ALIVE CONNECTION
+Metrics : ceil(zookeeper_NumAliveConnections{instance="<YOUR_IP_XXX>:8181",job="jmx_exporter_zookeeper"})
+Format : Time series
+Visualization : stat
+color mode : value
+Graph mode : none
+Field Display name :  
+Unit : 
+
+Panel title : [JMX_1] ZOOKEEPER PACKETS RECEIVED
+Metrics : zookeeper_PacketsReceived{instance="<YOUR_IP_XXX>:8181",job="jmx_exporter_zookeeper"}
+Format : Table
+Visualization : Graph
+Graph mode : 
+Field Display name :  
+Unit : packets/sec
+
+Panel title : [JMX_1] ZOOKEEPER PACKETS SENT
+Metrics : zookeeper_PacketsSent{instance="<YOUR_IP_XXX>:8181",job="jmx_exporter_zookeeper"}
+Format : Table
+Visualization : Graph
+Graph mode : 
+Field Display name :  
+Unit : packets/sec
+
+Panel title : [JMX_2] KAFKA DISK WRITE
+Metrics : kafka_server_kafkaserver_linux_disk_write_bytes{instance="<YOUR_IP_XXX>:8282",job="jmx_exporter_kafka"}
+Format : Table
+Visualization : Graph
+Graph mode : 
+Field Display name :  
+Unit :  bytes(SI)
+
+Panel title : [JMX_2] KAFKA DISK READ
+Metrics : kafka_server_kafkaserver_linux_disk_read_bytes{instance="<YOUR_IP_XXX>:8282",job="jmx_exporter_kafka"}
+Format : Table
+Visualization : Graph
+Graph mode : 
+Field Display name :  
+Unit :  bytes(SI)
+
+
+Panel title : [JMX_2] KAFKA TOPIC USER (MESSAGE IN)
+Metrics : kafka_server_brokertopicmetrics_messagesin_total{instance="<YOUR_IP_XXX>:8282",job="jmx_exporter_kafka",topic="users"}
+Format : Table
+Visualization : stat
+color mode :  value
+Graph mode :  none
+Field Display name :  
+Unit : short
+
+Panel title : [JMX_2] KAFKA TOPIC PAGEVIEWS (MESSAGE IN)
+Metrics : kafka_server_brokertopicmetrics_messagesin_total{instance="<YOUR_IP_XXX>:8282",job="jmx_exporter_kafka",topic="pageviews"}
+Format : Table
+Visualization : stat
+color mode :  value
+Graph mode :  none
+Field Display name :  
+Unit : short
+
+
+Panel title : [JMX_2] KAFKA TOPIC PAGEVIEWS (MESSAGE IN)
+Metrics : kafka_server_brokertopicmetrics_messagesin_total{instance="<YOUR_IP_XXX>:8282",job="jmx_exporter_kafka",topic="pageviews"}
+Format : Table
+Visualization : stat
+color mode :  value
+Graph mode :  none
+Field Display name :  
+Unit : short
+
+
+Panel title : [JMX_2] PRODUCER KAFKA THROTTLE TIME 
+Metrics : kafka_network_requestmetrics_throttletimems_count{instance="<YOUR_IP_XXX>:8282",job="jmx_exporter_kafka",request="Produce"}
+Format : Time series
+Visualization : graph
+Field Display name : value
+Unit : short
+
+Panel title : [JMX_2] CONSUMER KAFKA THROTTLE TIME 
+Metrics : kafka_network_requestmetrics_throttletimems_count{instance="<YOUR_IP_XXX>:8282",job="jmx_exporter_kafka",request="FetchConsumer"}
+Format : Time series
+Visualization : graph
+Field Display name : value
+Unit : short
+
+Panel title : [NODE_2] NETWORK ICMP IN - LINUX CONFLUENT  SERVER
+#Metrics : irate(node_netstat_Icmp_InMsgs{instance="<YOUR_IP_XXX>:9100",job="node_exporter_server_confluent"}[1m])
+Metrics : node_netstat_Icmp_InMsgs{instance="<YOUR_IP_XXX>:9100",job="node_exporter_server_confluent"}
+Format : Time series
+Visualization : graph
+Field Display name : value
+Unit : bytes/sec(SI)
+
+Panel title : [NODE_2] NETWORK ICMP OUT - LINUX CONFLUENT SERVER
+#Metrics : irate(node_netstat_Icmp_OutMsgs{instance="<YOUR_IP_XXX>:9100",job="node_exporter_server_confluent"}[1m])
+Metrics : node_netstat_Icmp_OutMsgs{instance="<YOUR_IP_XXX>:9100",job="node_exporter_server_confluent"}
+Format : Time series
+Visualization : graph
+Field Display name : value
+Unit : bytes/sec(SI)

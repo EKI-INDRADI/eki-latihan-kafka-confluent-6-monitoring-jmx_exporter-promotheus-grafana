@@ -1,0 +1,137 @@
+https://ibm.github.io/event-streams/administering/cluster-health/
+
+https://www.robustperception.io/viewing-logs-for-the-jmx-exporter
+
+https://grafana.com/blog/2020/06/25/monitoring-java-applications-with-the-prometheus-jmx-exporter-and-grafana/
+https://alex.dzyoba.com/blog/jmx-exporter/
+
+https://github.com/prometheus/jmx_exporter
+
+
+https://www.openlogic.com/blog/prometheus-java-monitoring-and-gathering-data
+
+
+wget https://github.com/prometheus/jmx_exporter/blob/master/example_configs/kafka-2_0_0.yml
+wget https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.14.0/jmx_prometheus_javaagent-0.14.0.jar
+
+java -javaagent:./jmx_prometheus_javaagent-0.14.0.jar=8080:config.yaml -jar yourJar.jar
+
+java -javaagent:./jmx_prometheus_javaagent-0.14.0.jar=8181:config.yaml -jar ProJmxExporter.jar
+
+
+
+ -javaagent:./jmx_prometheus_javaagent-0.14.0.jar=8181:config.yaml -jar ProJmxExporter.jar
+
+-javaagent:/opt/jmx-exporter/jmx-exporter.jar=7071:/etc/jmx-exporter/kafka.yml
+
+chmod 777 -Rv /home/JMX_EXPORTER
+-javaagent:/home/JMX_EXPORTER/jmx_prometheus_javaagent-0.14.0.jar=8181:/home/JMX_EXPORTER/config.yml -jar KafkaJmxExporter.jar
+
+
+git clone https://github.com/prometheus/jmx_exporter.git
+
+
+-javaagent:/home/JMX_EXPORTER/jmx_prometheus_javaagent-0.14.0.jar=8181:/home/JMX_EXPORTER/jmx_exporter/example_configs/kafka.yml
+
+
+
+
+
+
+
+
+
+
+
+
+
+https://stackoverflow.com/questions/58033823/configuring-kafka-with-jmx-exporter-centos-7
+mvn package
+
+
+
+
+
+
+
+
+
+https://grafana.com/blog/2020/06/25/monitoring-java-applications-with-the-prometheus-jmx-exporter-and-grafana/
+
+https://grafana.com/blog/2020/06/25/monitoring-java-applications-with-the-prometheus-jmx-exporter-and-grafana/
+git clone https://github.com/prometheus/jmx_exporter.git
+cd jmx_exporter
+mvn package
+
+=========== install apache maven
+apt-get update
+apt-get install maven
+mvn -v
+=========== install apache maven
+
+cd /home/JMX_EXPORTER/jmx_exporter
+ls jmx_prometheus_javaagent/target/jmx*jar
+
+------------ not used
+export EXTRA_ARGS="-Dcom.sun.management.jmxremote \
+    -Dcom.sun.management.jmxremote.authenticate=false \
+    -Dcom.sun.management.jmxremote.ssl=false \
+    -Djava.util.logging.config.file=logging.properties \
+    -javaagent:./jmx_exporter/jmx_prometheus_javaagent/target/jmx_prometheus_javaagent-0.12.1-SNAPSHOT.jar=8080:jmx_exporter/example_configs/kafka-2_0_0.yml
+------------ not used
+
+export EXTRA_ARGS="-Dcom.sun.management.jmxremote \
+    -Dcom.sun.management.jmxremote.authenticate=false \
+    -Dcom.sun.management.jmxremote.ssl=false \
+    -Djava.util.logging.config.file=logging.properties \
+    -javaagent:./jmx_exporter/jmx_prometheus_javaagent/target/jmx_prometheus_javaagent-0.14.1-SNAPSHOT.jar=8080:jmx_exporter/example_configs/kafka-2_0_0.yml
+
+
+nano ~/.bashrc
+export EXTRA_ARGS="-Dcom.sun.management.jmxremote \
+    -Dcom.sun.management.jmxremote.authenticate=false \
+    -Dcom.sun.management.jmxremote.ssl=false \
+    -Djava.util.logging.config.file=logging.properties \
+    -javaagent:/home/JMX_EXPORTER/jmx_exporter/jmx_prometheus_javaagent/target/jmx_prometheus_javaagent-0.14.1-SNAPSHOT.jar=8080:jmx_exporter/example_configs/kafka-2_0_0.yml"
+
+https://grafana.com/blog/2020/06/25/monitoring-java-applications-with-the-prometheus-jmx-exporter-and-grafana/ atau liad document c4
+confluent local services start 
+
+
+
+//============================= JMX EXPORTER ONLY ===================
+
+
+nano ~/.bashrc
+export EXTRA_ARGS="-Dcom.sun.management.jmxremote \
+    -Dcom.sun.management.jmxremote.authenticate=false \
+    -Dcom.sun.management.jmxremote.ssl=false \
+    -Djava.util.logging.config.file=logging.properties \
+    -javaagent:/home/JMX_EXPORTER/jmx_exporter/jmx_prometheus_javaagent/target/jmx_prometheus_javaagent-0.14.1-SNAPSHOT.jar=8181:jmx_exporter/example_configs/kafka-2_0_0.yml"
+
+
+java -javaagent:./jmx_prometheus_javaagent-0.14.0.jar=8181:config.yaml -jar myapp.jar
+
+
+
+
+
+
+cd /home/JMX_EXPORTER/
+nano config.yaml
+java -javaagent:./jmx_prometheus_javaagent-0.14.0.jar=8181:jmx_exporter/example_configs/kafka-2_0_0.yml
+java -javaagent:/home/JMX_EXPORTER/jmx_exporter/jmx_prometheus_javaagent/target/jmx_prometheus_javaagent-0.14.1-SNAPSHOT.jar=8181:jmx_exporter/example_configs/kafka-2_0_0.yml
+
+
+java -javaagent:/home/JMX_EXPORTER/jmx_exporter/jmx_prometheus_javaagent/target/jmx_prometheus_javaagent-0.14.1-SNAPSHOT.jar=8080:jmx_exporter/example_configs/kafka-2_0_0.yml
+
+
+export CONFLUENT_HOME=/home/CONFLUENT_6_FILES \
+export PATH=$PATH:$CONFLUENT_HOME/bin
+
+confluent local services zookeeper start
+confluent local services zookeeper stop
+
+
+confluent local services start
+confluent local services stop

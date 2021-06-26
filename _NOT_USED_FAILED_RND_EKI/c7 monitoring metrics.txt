@@ -1,0 +1,475 @@
+https://dzone.com/articles/kafka-monitoring-via-prometheus-amp-grafana
+
+https://docs.confluent.io/platform/current/quickstart/ce-quickstart.html
+
+
+ikutin setting control center sampe step 3, step 4 jgn di kerjakan dlu
+
+Step 4: Create and Write to a Stream and Table using ksqlDB
+
+
+
+sampe sini
+Write Queries
+In this step, you create ksqlDB queries against the stream and the tabe you created above.
+
+================
+CARA SETTING TOPIC BIAR GA BIKIN MEMORY PENUH
+
+TOPIC > CONFIGURATION > EDIT SETTINGS >
+Retention size    
+atau
+Ratention 1 hour
+
+
+
+
+
+NODE_EXPORTER NETWORK
+--Following are the few key node metrics you can use to find its statistics.
+node_memory_MemFree_bytes
+node_cpu_seconds_total
+node_filesystem_avail_bytes
+rate(node_cpu_seconds_total{mode="system"}[1m]) 
+rate(node_network_receive_bytes_total[1m])
+
+{cpu="0", instance="<YOUR_IP_XXX>:9100", job="node_exporter", mode="system"}{cpu="0", instance="<YOUR_IP_X>:9100", job="node_exporter_server_confluent", mode="system"
+
+
+rate(node_cpu_seconds_total{mode="system"}[1m]) 
+
+
+====================== CPU USAGE
+rate(node_cpu_seconds_total{job="node_exporter_server_confluent",mode="system"}[1m]) 
+======================
+
+====================== NETWORK
+rate(node_network_receive_bytes_total{instance="<YOUR_IP_X>:9100", job="node_exporter_server_confluent"}[1m])
+====================== NETWORK
+
+
+
+CARA UBAH FORMAT GRAFANA :
+
+EDIT PANEL > FIELD > UNIT
+
+rate(node_cpu_seconds_total{job="node_exporter_server_confluent",mode="system"}[1m]) * 60
+100 - (avg by (instance) (irate(node_cpu_seconds_total{job="node_exporter_server_confluent",mode="idle"}[5m])) * 100))
+
+check metrix dsni :
+https://dzone.com/articles/kafka-monitoring-via-prometheus-amp-grafana
+http://<YOUR_IP_XXX>:9090/graph?g0.range_input=1h&g0.expr=kafka_server_brokertopicmetrics_messagesin_total&g0.tab=1
+
+JMX_EXPORTER KAFKA TOPIC
+kafka_server_brokertopicmetrics_messagesin_total{instance="<YOUR_IP_X>:8282",job="jmx_exporter_kafka",topic="users"}
+kafka_server_brokertopicmetrics_messagesin_total{instance="<YOUR_IP_X>:8282",job="jmx_exporter_kafka",topic="pageviews"}
+jvm_memory_bytes_used{job="jmx_exporter_kafka",instance="<YOUR_IP_X>:8282"}
+rate(process_cpu_seconds_total{job="jmx_exporter_kafka",instance="<YOUR_IP_X>:8282"} [5m])
+
+
+
+
+
+kafka_network_requestmetrics_throttletimems_count{instance="<YOUR_IP_X>:8282",job="jmx_exporter_kafka",request="Produce"}
+
+
+
+kafka_server_brokertopicmetrics_totalproducerequests_total{instance="<YOUR_IP_X>:8282",job="jmx_exporter_kafka"}
+
+kafka_network_requestmetrics_remotetimems_count{request="Produce",}
+kafka_network_requestmetrics_temporarymemorybytes_count{request="Produce",} 200089.0
+kafka_network_requestmetrics_localtimems_count{request="Produce",} 200089.0
+
+
+
+//============ SOLVED
+kafka_network_requestmetrics_requests_total{instance="<YOUR_IP_X>:8282",job="jmx_exporter_kafka",request="FetchConsumer",version="11"}	591475
+kafka_network_requestmetrics_requests_total{instance="<YOUR_IP_X>:8282",job="jmx_exporter_kafka",request="Produce",version="8"}	204356
+kafka_network_requestmetrics_requests_total{instance="<YOUR_IP_X>:8282",job="jmx_exporter_kafka",request="Metadata",version="9"}	42790
+
+//============ SOLVED
+
+
+
+
+kafka_log_log_totalsize{topic="_confluent-controlcenter-6-0-1-1-aggregatedTopicPartitionTableWindows-ONE_MINUTE-repartition",partition="1",}
+
+
+//============ xSOLVED
+kafka_server_brokertopicmetrics_bytesin_total{instance="<YOUR_IP_X>:8282",job="jmx_exporter_kafka"}
+kafka_server_brokertopicmetrics_bytesout_total{instance="<YOUR_IP_X>:8282",job="jmx_exporter_kafka"}
+kafka_network_requestmetrics_requestbytes_count{request="Produce",} 200089.0
+kafka_network_requestmetrics_responsequeuetimems_count{request="Produce",} 200089.0
+kafka_network_requestmetrics_messageconversionstimems_count{request="Produce",} 200089.0
+kafka_network_requestmetrics_totaltimems_count{request="Produce",} 200089.0
+kafka_network_requestmetrics_errors_total{request="Produce",error="NONE",} 277822.0
+kafka_network_requestmetrics_remotetimems_count{request="Produce",} 200089.0
+kafka_network_requestmetrics_temporarymemorybytes_count{request="Fetch",} 535216.0
+kafka_network_requestmetrics_temporarymemorybytes_count{request="Produce",} 200089.0
+kafka_network_requestmetrics_localtimems_count{request="Produce",} 200089.0
+kafka_network_requestmetrics_requestbytes_count{request="Produce",} 200089.0
+kafka_server_delayedoperationpurgatory_numdelayedoperations{delayedOperation="Produce",} 0.0
+kafka_network_requestmetrics_throttletimems_count{request="Produce",} 200089.0
+kafka_network_requestmetrics_responsesendiotimems_count{request="Produce",} 200089.0
+kafka_server_brokertopicmetrics_totalproducerequests_total 282089.0
+kafka_server_brokertopicmetrics_totalproducerequests_total{topic="_confluent-monitoring",} 3028.0
+kafka_server_brokertopicmetrics_totalproducerequests_total{topic="_confluent-controlcenter-6-0-1-1-metrics-trigger-measurement-rekey",} 7774.0
+kafka_server_brokertopicmetrics_totalproducerequests_total{topic="_confluent-controlcenter-6-0-1-1-MetricsAggregateStore-repartition",} 20517.0
+kafka_network_requestmetrics_requests_total{request="Produce",version="8",} 200089.0
+kafka_network_requestmetrics_responsesendtimems_count{request="Produce",} 200089.0
+
+
+kafka_server_brokertopicmetrics_totalproducerequests_total{topic="_confluent-controlcenter-6-0-1-1-metrics-trigger-measurement-rekey",} 7774.0
+kafka_server_brokertopicmetrics_totalproducerequests_total{topic="_confluent-controlcenter-6-0-1-1-MetricsAggregateStore-repartition",} 20517.0
+kafka_server_brokertopicmetrics_totalproducerequests_total{topic="connect-configs",} 3.0
+kafka_server_brokertopicmetrics_totalproducerequests_total{topic="users",} 14400.0
+kafka_server_brokertopicmetrics_totalproducerequests_total{topic="_confluent-controlcenter-6-0-1-1-aggregatedTopicPartitionTableWindows-THREE_HOURS-repartition",} 969.0
+kafka_server_brokertopicmetrics_totalproducerequests_total{topic="_confluent-telemetry-metrics",} 17319.0
+kafka_server_brokertopicmetrics_totalproducerequests_total{topic="_confluent-controlcenter-6-0-1-1-aggregatedTopicPartitionTableWindows-ONE_MINUTE-repartition",} 969.0
+kafka_server_brokertopicmetrics_totalproducerequests_total{topic="_confluent-controlcenter-6-0-1-1-MonitoringVerifierStore-changelog",} 749.0
+kafka_server_brokertopicmetrics_totalproducerequests_total{topic="_confluent-controlcenter-6-0-1-1-monitoring-message-rekey-store",} 5033.0
+kafka_server_brokertopicmetrics_totalproducerequests_total{topic="_confluent-controlcenter-6-0-1-1-expected-group-consumption-rekey",} 2062.0
+kafka_server_brokertopicmetrics_totalproducerequests_total{topic="_confluent-command",} 1.0
+kafka_server_brokertopicmetrics_totalproducerequests_total{topic="_confluent-monitoring",} 3028.0
+kafka_server_brokertopicmetrics_totalproducerequests_total 282089.0
+kafka_server_brokertopicmetrics_totalproducerequests_total{topic="_confluent-controlcenter-6-0-1-1-MetricsAggregateStore-changelog",} 3926.0
+kafka_server_brokertopicmetrics_totalproducerequests_total{topic="_confluent-controlcenter-6-0-1-1-KSTREAM-OUTERTHIS-0000000105-store-changelog",} 2065.0
+kafka_server_brokertopicmetrics_totalproducerequests_total{topic="_confluent-controlcenter-6-0-1-1-actual-group-consumption-rekey",} 2062.0
+kafka_server_brokertopicmetrics_totalproducerequests_total{topic="pageviews",} 144505.0
+kafka_server_brokertopicmetrics_totalproducerequests_total{topic="connect-offsets",} 240.0
+kafka_server_brokertopicmetrics_totalproducerequests_total{topic="connect-statuses",} 3.0
+kafka_server_brokertopicmetrics_totalproducerequests_total{topic="_confluent-controlcenter-6-0-1-1-aggregate-topic-partition-store-changelog",} 491.0
+kafka_server_brokertopicmetrics_totalproducerequests_total{topic="_confluent-controlcenter-6-0-1-1-aggregatedTopicPartitionTableWindows-THREE_HOURS-changelog",} 971.0
+kafka_server_brokertopicmetrics_totalproducerequests_total{topic="_schemas",} 2.0
+kafka_server_brokertopicmetrics_totalproducerequests_total{topic="_confluent-metrics",} 43381.0
+kafka_server_brokertopicmetrics_totalproducerequests_total{topic="_confluent-controlcenter-6-0-1-1-aggregatedTopicPartitionTableWindows-ONE_MINUTE-changelog",} 971.0
+kafka_server_brokertopicmetrics_totalproducerequests_total{topic="_confluent-controlcenter-6-0-1-1-KSTREAM-OUTEROTHER-0000000106-store-changelog",} 2065.0
+kafka_server_brokertopicmetrics_totalproducerequests_total{topic="_confluent-controlcenter-6-0-1-1-monitoring-trigger-event-rekey",} 4138.0
+kafka_server_brokertopicmetrics_totalproducerequests_total{topic="_confluent_balancer_broker_samples",} 89.0
+kafka_server_brokertopicmetrics_totalproducerequests_total{topic="__consumer_offsets",} 4267.0
+kafka_server_brokertopicmetrics_totalproducerequests_total{topic="_confluent_balancer_partition_samples",} 89.0
+
+
+kafka_server_brokertopicmetrics_totalproducerequests_total{topic="__consumer_offsets",} 4267.0
+kafka_server_brokertopicmetrics_consumerfetchlagtimems_count 2155885.0
+kafka_server_brokertopicmetrics_bytesin_total{topic="__consumer_offsets",} 2194731.0
+kafka_server_brokertopicmetrics_bytesin_total{topic="_confluent-controlcenter-6-0-1-1-expected-group-consumption-rekey",} 274246.0
+kafka_network_requestmetrics_requestbytes_count{request="FetchConsumer",} 535216.0
+kafka_network_requestmetrics_throttletimems_count{request="FetchConsumer",} 535230.0
+kafka_server_brokertopicmetrics_messagesin_total{topic="__consumer_offsets",} 14809.0
+kafka_network_requestmetrics_responsesendiotimems_count{request="FetchConsumer",} 535245.0
+kafka_server_delayedfetchmetrics_expires_total{fetcherType="consumer",} 477426.0
+kafka_network_requestmetrics_responsesendtimems_count{request="FetchConsumer",} 535230.0
+
+
+
+
+
+
+kafka_network_requestmetrics_requestbytes_count{request="FetchConsumer",} 535216.0
+
+
+
+kafka_network_requestmetrics_throttletimems_count{instance="<YOUR_IP_X>:8282",job="jmx_exporter_kafka",request="FetchConsumer"}
+kafka_network_requestmetrics_throttletimems_count{instance="<YOUR_IP_X>:8282",job="jmx_exporter_kafka",request="Produce"}
+//============ xSOLVED
+
+
+
+
+KAFKA PARTITIONS
+kafka_controller_kafkacontroller_globalpartitioncount{instance="<YOUR_IP_X>:8282",job="jmx_exporter_kafka"}
+
+KAFKA DISK READ (BYTES)
+kafka_server_kafkaserver_linux_disk_read_bytes{instance="<YOUR_IP_X>:8282",job="jmx_exporter_kafka"}
+
+KAFKA DISK WRITE (BYTES)
+kafka_server_kafkaserver_linux_disk_write_bytes{instance="<YOUR_IP_X>:8282",job="jmx_exporter_kafka"}
+
+
+JMX_EXPORTER ZOOKEEPER
+zookeeper_DataDirSize{instance="<YOUR_IP_X>:8181",job="jmx_exporter_zookeeper"}
+zookeeper_PacketsSent{instance="<YOUR_IP_X>:8181",job="jmx_exporter_zookeeper"}
+zookeeper_PacketsReceived{instance="<YOUR_IP_X>:8181",job="jmx_exporter_zookeeper"}
+
+
+
+
+CPU (4 CORE) USAGE LINUX CONFLUENT SERVER
+rate(node_cpu_seconds_total{job="node_exporter_server_confluent",mode="system"}[1m]) 
+
+
+
+NETWORK LINUX CONFLUENT SERVER
+rate(node_network_receive_bytes_total{instance="<YOUR_IP_X>:9100", job="node_exporter_server_confluent"}[1m])
+
+DISK USAGE LINUX CONFLUENT SERVER
+node_filesystem_avail_bytes{device="/dev/ploop26458p1",fstype="ext4",instance="<YOUR_IP_X>:9100",job="node_exporter_server_confluent",mountpoint="/"}
+
+
+
+
+
+
+
+
+node_memory_MemAvailable_bytes{instance="<YOUR_IP_X>:9100",job="node_exporter_server_confluent"}
+
+
+
+
+
+
+=================== CONFLUENT METRICS :
+
+http://<YOUR_IP_X>:9021/2.0/metrics/dx1ieNSFS6-rLtSACk-K6g/topic/status
+
+
+
+
+http://<YOUR_IP_X>:9021/2.0/metrics/dx1ieNSFS6-rLtSACk-K6g/broker/detail
+{"topicCount":64,"onlinePartitionCount":324,"underReplicatedPartitionCount":0,"offlinePartitionCount":0,"inSyncReplicas":324,"outOfSyncReplicas":0}
+
+
+
+
+
+
+
+
+
+
+
+//=============== New Metrics
+
+Info field : https://grafana.com/docs/grafana/latest/panels/field-options/standard-field-options/
+
+
+Panel title : [NODE_2] DISK USAGE LINUX CONFLUENT SERVER
+Metrics : node_filesystem_avail_bytes{device="/dev/ploop26458p1",fstype="ext4",instance="<YOUR_IP_X>:9100",job="node_exporter_server_confluent",mountpoint="/"}
+Format : Time series
+Visualization : Guage
+Field Display name :  bytes(SI)
+
+
+
+Panel title : [NODE_2] NETWORK LINUX CONFLUENT SERVER
+Metrics : rate(node_network_receive_bytes_total{instance="<YOUR_IP_X>:9100", job="node_exporter_server_confluent"}[1m])
+Format : Time series
+Visualization : Graph
+Field Display name : ${__field.labels.device}
+Unit : bytes/sec(SI)
+
+Panel title : [NODE_2] CPU USAGE - LINUX CONFLUENT SERVER
+Metrics : sum(irate(node_cpu_seconds_total{job="node_exporter_server_confluent",mode="system"}[1m])) * 100
+Format : Time series
+Visualization : Bar guage
+Field Display name :  Core : ${__field.labels.cpu}
+Unit : Percent(0-100)
+
+
+Panel title : [NODE_2] CPU (4 CORE) USAGE LINUX CONFLUENT SERVER [MAINTENANCE]
+#Metrics old : rate(node_cpu_seconds_total{job="node_exporter_server_confluent",mode="system"}[1m]) * 10
+(irate(node_cpu_seconds_total{job="node_exporter_server_confluent",instance="<YOUR_IP_X>:9100",mode="system"}[1m])) * 100
+(irate(node_cpu_seconds_total{job="node_exporter_server_confluent",mode="system"}[1m]) * 100 ) 
+Metrics new : (rate(node_cpu_seconds_total{job="node_exporter_server_confluent",mode="system"}[1m]) * 100 ) / 4
+Format : Time series
+Visualization : Bar guage
+Field Display name :  Core : ${__field.labels.cpu}
+Unit : Percent(0.0-1.0)
+
+
+Panel title : [JMX_2] CONFLUENT KAFKA ONLY CPU USAGE
+#Metrics old : rate(node_cpu_seconds_total{job="node_exporter_server_confluent",mode="system"}[1m]) * 10
+Metrics : sum(rate(process_cpu_seconds_total{job="jmx_exporter_kafka",instance="<YOUR_IP_X>:8282"}[1m])) / sum(count(node_cpu_seconds_total{job="node_exporter_server_confluent",mode="system"})) * 100
+Metrics new :sum(rate(process_cpu_seconds_total{job="jmx_exporter_kafka",instance="<YOUR_IP_X>:8282"}[1m])) / sum(count(node_cpu_seconds_total{job="node_exporter_server_confluent",mode="system"})) * 100
+Format : Time series
+Visualization : Graph
+Field Display name : 
+Unit : Percent(0-100)
+
+Panel title : [JMX_2] CONFLUENT KAFKA MEMORY USED
+Metrics : jvm_memory_bytes_used{job="jmx_exporter_kafka",instance="<YOUR_IP_X>:8282"}
+Format : Time series
+Visualization : Graph
+Field Display name : ${__field.labels.area}
+Unit : bytes(SI)
+
+Panel title : [JMX_2] NETWORK METADATA KAFKA TOTAL REQUEST
+Metrics : kafka_network_requestmetrics_requests_total{instance="<YOUR_IP_X>:8282",job="jmx_exporter_kafka",request="Metadata",version="9"}
+Format : Time series
+Visualization : Stat
+Field Display name : METADATA KAFKA REQUEST
+Unit : 
+
+Panel title : [JMX_2] NETWORK KAFKA PRODUCER TOTAL REQUEST
+Metrics : kafka_network_requestmetrics_requests_total{instance="<YOUR_IP_X>:8282",job="jmx_exporter_kafka",request="Produce",version="8"}
+Format : Time series
+Visualization : Stat
+Field Display name : KAFKA REQUEST
+Unit : 
+
+Panel title : [JMX_2] NETWORK KAFKA CONSUMER TOTAL REQUEST
+Metrics : kafka_network_requestmetrics_requests_total{instance="<YOUR_IP_X>:8282",job="jmx_exporter_kafka",request="FetchConsumer",version="11"}
+Format : Time series
+Visualization : Stat
+Field Display name : CONSUMER REQUEST
+Unit : 
+
+
+== kafka cpu process salah
+
+Panel title : [JMX_2] KAFKA PARTITIONS
+Metrics : kafka_controller_kafkacontroller_globalpartitioncount{instance="<YOUR_IP_X>:8282",job="jmx_exporter_kafka"}
+Format : Time series
+Visualization : Stat
+Graph mode : none
+Field Display name : 
+Unit : 
+
+
+Panel title : [NODE_2] NETWORK ICMP ERROR  - LINUX CONFLUENT SERVER
+Metrics : node_netstat_Icmp_InErrors{instance="<YOUR_IP_X>:9100",job="node_exporter_server_confluent"}
+Format : Time series
+Visualization : Stat
+Graph mode : none
+Field Display name :  FAIL CONNECTION (LOSS)
+Unit : 
+
+Panel title : [JMX_1] ZOOKEEPER DATA SIZE
+Metrics : zookeeper_DataDirSize{instance="<YOUR_IP_X>:8181",job="jmx_exporter_zookeeper"}
+Format : Time series
+Visualization : Stat
+Graph mode : area
+Field Display name :  
+Unit : bytes(SI)
+
+
+Panel title : [NODE_2] FREE SWAP - LINUX CONFLUENT SERVER
+Metrics : node_memory_SwapFree_bytes{instance="<YOUR_IP_X>:9100",job="node_exporter_server_confluent"}
+Format : Time series
+Visualization : Stat
+Graph mode : area
+Field Display name :  
+Unit : bytes(SI)
+
+Panel title : [NODE_2] FREE RAM - LINUX CONFLUENT SERVER
+Metrics : node_memory_MemAvailable_bytes{instance="<YOUR_IP_X>:9100",job="node_exporter_server_confluent"}
+Format : Time series
+Visualization : Stat
+Graph mode : area
+Field Display name :  
+Unit : bytes(SI)
+
+Panel title : [JMX_1] ZOOKEEPER ALIVE CONNECTION
+Metrics : ceil(zookeeper_NumAliveConnections{instance="<YOUR_IP_X>:8181",job="jmx_exporter_zookeeper"})
+Format : Time series
+Visualization : stat
+color mode : value
+Graph mode : none
+Field Display name :  
+Unit : 
+
+Panel title : [JMX_1] ZOOKEEPER PACKETS RECEIVED
+Metrics : zookeeper_PacketsReceived{instance="<YOUR_IP_X>:8181",job="jmx_exporter_zookeeper"}
+Format : Table
+Visualization : Graph
+Graph mode : 
+Field Display name :  
+Unit : packets/sec
+
+Panel title : [JMX_1] ZOOKEEPER PACKETS SENT
+Metrics : zookeeper_PacketsSent{instance="<YOUR_IP_X>:8181",job="jmx_exporter_zookeeper"}
+Format : Table
+Visualization : Graph
+Graph mode : 
+Field Display name :  
+Unit : packets/sec
+
+Panel title : [JMX_2] KAFKA DISK WRITE
+Metrics : kafka_server_kafkaserver_linux_disk_write_bytes{instance="<YOUR_IP_X>:8282",job="jmx_exporter_kafka"}
+Format : Table
+Visualization : Graph
+Graph mode : 
+Field Display name :  
+Unit :  bytes(SI)
+
+Panel title : [JMX_2] KAFKA DISK READ
+Metrics : kafka_server_kafkaserver_linux_disk_read_bytes{instance="<YOUR_IP_X>:8282",job="jmx_exporter_kafka"}
+Format : Table
+Visualization : Graph
+Graph mode : 
+Field Display name :  
+Unit :  bytes(SI)
+
+
+Panel title : [JMX_2] KAFKA TOPIC USER (MESSAGE IN)
+Metrics : kafka_server_brokertopicmetrics_messagesin_total{instance="<YOUR_IP_X>:8282",job="jmx_exporter_kafka",topic="users"}
+Format : Table
+Visualization : stat
+color mode :  value
+Graph mode :  none
+Field Display name :  
+Unit : short
+
+Panel title : [JMX_2] KAFKA TOPIC PAGEVIEWS (MESSAGE IN)
+Metrics : kafka_server_brokertopicmetrics_messagesin_total{instance="<YOUR_IP_X>:8282",job="jmx_exporter_kafka",topic="pageviews"}
+Format : Table
+Visualization : stat
+color mode :  value
+Graph mode :  none
+Field Display name :  
+Unit : short
+
+
+Panel title : [JMX_2] KAFKA TOPIC PAGEVIEWS (MESSAGE IN)
+Metrics : kafka_server_brokertopicmetrics_messagesin_total{instance="<YOUR_IP_X>:8282",job="jmx_exporter_kafka",topic="pageviews"}
+Format : Table
+Visualization : stat
+color mode :  value
+Graph mode :  none
+Field Display name :  
+Unit : short
+
+
+Panel title : [JMX_2] PRODUCER KAFKA THROTTLE TIME 
+Metrics : kafka_network_requestmetrics_throttletimems_count{instance="<YOUR_IP_X>:8282",job="jmx_exporter_kafka",request="Produce"}
+Format : Time series
+Visualization : graph
+Field Display name : value
+Unit : short
+
+Panel title : [JMX_2] CONSUMER KAFKA THROTTLE TIME 
+Metrics : kafka_network_requestmetrics_throttletimems_count{instance="<YOUR_IP_X>:8282",job="jmx_exporter_kafka",request="FetchConsumer"}
+Format : Time series
+Visualization : graph
+Field Display name : value
+Unit : short
+
+
+
+https://www.cnblogs.com/qianyuliang/p/10542757.html
+
+Panel title : [NODE_2] NETWORK ICMP IN - LINUX CONFLUENT  SERVER
+#Metrics : irate(node_netstat_Icmp_InMsgs{instance="<YOUR_IP_X>:9100",job="node_exporter_server_confluent"}[1m])
+Metrics : node_netstat_Icmp_InMsgs{instance="<YOUR_IP_X>:9100",job="node_exporter_server_confluent"}
+Format : Time series
+Visualization : graph
+Field Display name : value
+Unit : bytes/sec(SI)
+
+Panel title : [NODE_2] NETWORK ICMP OUT - LINUX CONFLUENT SERVER
+#Metrics : irate(node_netstat_Icmp_OutMsgs{instance="<YOUR_IP_X>:9100",job="node_exporter_server_confluent"}[1m])
+Metrics : node_netstat_Icmp_OutMsgs{instance="<YOUR_IP_X>:9100",job="node_exporter_server_confluent"}
+Format : Time series
+Visualization : graph
+Field Display name : value
+Unit : bytes/sec(SI)
+
+
+
+
+Metrics : rate(node_cpu_seconds_total{job="node_exporter_server_confluent",mode="system"}[1m]) * 10
+Field -> Display Name : ${__field.labels.cpu}
+
+

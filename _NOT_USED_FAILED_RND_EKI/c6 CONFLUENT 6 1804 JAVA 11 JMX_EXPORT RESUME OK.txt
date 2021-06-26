@@ -1,0 +1,529 @@
+ssh root@<YOUR_IP_X> -p 22  (KAFKA)
+<YOUR_PASSWORD>
+
+ssh root@<YOUR_IP_XXX> -p 22 (PROMET)
+<YOUR_PASSWORD>
+
+
+ssh <YOUR_USERNAME>@<YOUR_IP_X> -p 22    <<<< CONFIG USR
+<YOUR_PASSWORD>
+
+apt-get install openssh-client
+apt-get install openssh-server
+apt-get install openssh-sftp-server
+apt-get install nano
+
+apt-get update
+apt-get install default-jdk  (ubuntu 1804 defaultnya java 11)
+apt-get install openjdk-8-jdk
+apt-get install openjdk-11-jdk
+-----
+Setting up openjdk-8-jre-headless:amd64 (8u275-b01-0ubuntu1~18.04) ...
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/orbd to provide /usr/bin/orbd (orbd) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/servertool to provide /usr/bin/servertool (servertool) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/tnameserv to provide /usr/bin/tnameserv (tnameserv) in auto mode
+Setting up libcairo2:amd64 (1.15.10-2ubuntu0.1) ...
+Setting up openjdk-8-jdk-headless:amd64 (8u275-b01-0ubuntu1~18.04) ...
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/idlj to provide /usr/bin/idlj (idlj) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/wsimport to provide /usr/bin/wsimport (wsimport) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/jsadebugd to provide /usr/bin/jsadebugd (jsadebugd) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/native2ascii to provide /usr/bin/native2ascii (native2ascii) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/javah to provide /usr/bin/javah (javah) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/clhsdb to provide /usr/bin/clhsdb (clhsdb) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/xjc to provide /usr/bin/xjc (xjc) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/hsdb to provide /usr/bin/hsdb (hsdb) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/schemagen to provide /usr/bin/schemagen (schemagen) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/extcheck to provide /usr/bin/extcheck (extcheck) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/jhat to provide /usr/bin/jhat (jhat) in auto mode
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/bin/wsgen to provide /usr/bin/wsgen (wsgen) in auto mode
+
+--------
+apt-get install zip unzip
+
+
+java -version
+openjdk version "11.0.9.1" 2020-11-04
+OpenJDK Runtime Environment (build 11.0.9.1+1-Ubuntu-0ubuntu1.18.04)
+OpenJDK 64-Bit Server VM (build 11.0.9.1+1-Ubuntu-0ubuntu1.18.04, mixed mode, sharing)
+
+javac -version
+javac 11.0.9.1
+
+
+cd /home/
+mkdir -p /home/CONFLUENT_6_FILES
+mkdir -p /MANUAL_JAVA/DOWNLOADS && cd /MANUAL_JAVA/DOWNLOADS
+
+curl -L -o jmx_prometheus_javaagent-0.14.0.jar https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.14.0/jmx_prometheus_javaagent-0.14.0.jar
+mkdir -p /MANUAL_JAVA/JMX_PROMETHEUS
+
+mkdir -p /MANUAL_JAVA/JMX_JAR/KAFKA && cd /MANUAL_JAVA/JMX_JAR/KAFKA && wget https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.14.0/jmx_prometheus_javaagent-0.14.0.jar
+mkdir -p /MANUAL_JAVA/JMX_JAR/ZOOKEEPER && cd /MANUAL_JAVA/JMX_JAR/ZOOKEEPER && wget https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.14.0/jmx_prometheus_javaagent-0.14.0.jar
+
+cp -avr /MANUAL_JAVA/DOWNLOADS/jmx_prometheus_javaagent-0.14.0.jar /MANUAL_JAVA/JMX_PROMETHEUS/jmx_prometheus_javaagent-0.14.0-clone1.jar
+cp -avr /MANUAL_JAVA/DOWNLOADS/jmx_prometheus_javaagent-0.14.0.jar /MANUAL_JAVA/JMX_PROMETHEUS/jmx_prometheus_javaagent-0.14.0-clone2.jar
+
+https://jdk.java.net/archive/
+cd /MANUAL_JAVA/ && curl -L -o openjdk-11.0.2_linux-x64_bin.tar.gz https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz
+cp -avr openjdk-11.0.2_linux-x64_bin.tar.gz ./DOWNLOADS/
+tar -xvzf openjdk-11.0.2_linux-x64_bin.tar.gz
+rm -rf openjdk-11.0.2_linux-x64_bin.tar.gz
+
+apt-get install default-jdk -> untuk control center
+cp -avr jdk-11.0.2 jdk-11.0.2-clone1 --> untuk zookeeper
+cp -avr jdk-11.0.2 jdk-11.0.2-clone2 --> untuk kafka
+cp -avr jdk-11.0.2 jdk-11.0.2-clone3 --> untuk connect
+jdk-11.0.2 --> cadangan
+
+
+https://www.edureka.co/blog/how-to-install-java-on-ubuntu/
+
+update-alternatives --install /usr/bin/java java /MANUAL_JAVA/jdk-11.0.2/bin/java 100
+update-alternatives --install /usr/bin/javac javac /MANUAL_JAVA/jdk-11.0.2/bin/javac 100
+
+update-alternatives --install /usr/bin/java java /MANUAL_JAVA/jdk-11.0.2-clone1/bin/java 100
+update-alternatives --install /usr/bin/javac javac /MANUAL_JAVA/jdk-11.0.2-clone1/bin/javac 100
+
+update-alternatives --install /usr/bin/java java /MANUAL_JAVA/jdk-11.0.2-clone2/bin/java 100
+update-alternatives --install /usr/bin/javac javac /MANUAL_JAVA/jdk-11.0.2-clone2/bin/javac 100
+
+update-alternatives --install /usr/bin/java java /MANUAL_JAVA/jdk-11.0.2-clone3/bin/java 100
+update-alternatives --install /usr/bin/javac javac /MANUAL_JAVA/jdk-11.0.2-clone3/bin/javac 100
+
+
+update-alternatives --install /usr/bin/jar jar /MANUAL_JAVA/jdk-11.0.2/bin/jar 100
+update-alternatives --install /usr/bin/jar jar /MANUAL_JAVA/jdk-11.0.2-clone1/bin/jar 100
+update-alternatives --install /usr/bin/jar jar /MANUAL_JAVA/jdk-11.0.2-clone2/bin/jar 100
+update-alternatives --install /usr/bin/jar jar /MANUAL_JAVA/jdk-11.0.2-clone3/bin/jar 100
+
+
+
+
+https://gist.github.com/LongClipeus/77b0beda7a3a794688a5c4257007d3c8
+
+update-alternatives --config jar
+update-alternatives --config javac
+update-alternatives --config java  
+
+update-alternatives --set java /MANUAL_JAVA/jdk-11.0.2/bin/java 
+
+  Selection    Path                                         Priority   Status
+------------------------------------------------------------
+* 0            /usr/lib/jvm/java-11-openjdk-amd64/bin/java   1111      auto mode
+  1            /MANUAL_JAVA/jdk-11.0.2-clone1/bin/java       100       manual mode
+  2            /MANUAL_JAVA/jdk-11.0.2-clone2/bin/java       100       manual mode
+  3            /MANUAL_JAVA/jdk-11.0.2-clone3/bin/java       100       manual mode
+  4            /MANUAL_JAVA/jdk-11.0.2/bin/java              100       manual mode
+  5            /usr/lib/jvm/java-11-openjdk-amd64/bin/java   1111      manual mode
+
+Press <enter> to keep the current choice[*], or type selection number: 5
+
+update-alternatives --display java
+
+update-alternatives --display javac
+
+
+java -version
+
+
+nano ~/.bashrc
+#EKI JAVA
+
+
+export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+export PATH=$PATH:$JAVA_HOME/bin
+
+export JAVA_8_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+export PATH_8=$PATH_8:$JAVA_8_HOME/bin
+
+export JAVA_11_MANUAL_HOME=/MANUAL_JAVA/jdk-11.0.2
+export PATH_11_MANUAL=$PATH_11_MANUAL:$JAVA_11_MANUAL_HOME/bin
+
+export JAVA_11_MANUAL_CLONE1_HOME=/MANUAL_JAVA/jdk-11.0.2-clone1
+export PATH_11_MANUAL_CLONE1=$PATH_11_MANUAL_CLONE1:$JAVA_11_MANUAL_CLONE1_HOME/bin
+
+export JAVA_11_MANUAL_CLONE2_HOME=/MANUAL_JAVA/jdk-11.0.2-clone2
+export PATH_11_MANUAL_CLONE2=$PATH_11_MANUAL_CLONE2:$JAVA_11_MANUAL_CLONE2_HOME/bin
+
+export JAVA_11_MANUAL_CLONE3_HOME=/MANUAL_JAVA/jdk-11.0.2-clone3
+export PATH_11_MANUAL_CLONE3=$PATH_11_MANUAL_CLONE3:$JAVA_11_MANUAL_CLONE3_HOME/bin
+
+#CONFLUENT
+export CONFLUENT_HOME=/home/CONFLUENT_6_FILES
+export PATH=$PATH:$CONFLUENT_HOME/bin
+
+reboot
+
+
+
+//====================== not use
+
+export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64 && \
+export PATH=$PATH:$JAVA_HOME/bin 
+
+export JAVA_8_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+export PATH_8=$PATH_8:$JAVA_8_HOME/bin
+
+export JAVA_11_MANUAL_HOME=/MANUAL_JAVA/jdk-11.0.2 && \
+export PATH_11_MANUAL=$PATH_11_MANUAL:$JAVA_11_MANUAL_HOME/bin 
+
+export JAVA_11_MANUAL_CLONE1_HOME=/MANUAL_JAVA/jdk-11.0.2-clone1 && \
+export PATH_11_MANUAL_CLONE1=$PATH_11_MANUAL_CLONE1:$JAVA_11_MANUAL_CLONE1_HOME/bin 
+
+export JAVA_11_MANUAL_CLONE2_HOME=/MANUAL_JAVA/jdk-11.0.2-clone2 && \
+export PATH_11_MANUAL_CLONE2=$PATH_11_MANUAL_CLONE2:$JAVA_11_MANUAL_CLONE2_HOME/bin 
+
+export JAVA_11_MANUAL_CLONE3_HOME=/MANUAL_JAVA/jdk-11.0.2-clone3 && \
+export PATH_11_MANUAL_CLONE3=$PATH_11_MANUAL_CLONE3:$JAVA_11_MANUAL_CLONE3_HOME/bin 
+
+export CONFLUENT_HOME=/home/CONFLUENT_6_FILES && \
+export PATH=$PATH:$CONFLUENT_HOME/bin 
+
+//====================== not use
+
+echo $PATH_11_MANUAL_CLONE3
+
+cd $CONFLUENT_HOME/bin
+cp -avr connect-distributed connect-distributed-backup-18-01-2021
+cp -avr kafka-run-class kafka-run-class-backup-18-01-2021
+cp -avr kafka-server-start kafka-server-start-18-01-2021
+
+cp -avr kafka-run-class kafka-run-class-eki-config-zookeeper
+cp -avr kafka-run-class kafka-run-class-eki-config-kafka
+cp -avr kafka-run-class kafka-run-class-eki-config-connect
+
+cp -avr zookeeper-server-start zookeeper-server-start-18-01-2021
+
+
+
+
+
+mkdir -p /MANUAL_JAVA/JMX_JAR/KAFKA && cd /MANUAL_JAVA/JMX_JAR/KAFKA && wget https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.14.0/jmx_prometheus_javaagent-0.14.0.jar
+mkdir -p /MANUAL_JAVA/JMX_JAR/ZOOKEEPER && cd /MANUAL_JAVA/JMX_JAR/ZOOKEEPER && wget https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.14.0/jmx_prometheus_javaagent-0.14.0.jar
+
+
+
+================ ZOOKEEPER JMX_EXPORTER ================ 
+
+EXTRA_ARGS="-javaagent:/MANUAL_JAVA/jmx_prometheus/jmx_javaagent-0.14.0-clone1.jar=8181:/MANUAL_JAVA/jmx_prometheus_config/clone1_zookeeper.yaml"
+
+
+
+
+
+chmod 777 -Rv /MANUAL_JAVA/JMX_PROMETHEUS
+cd $CONFLUENT_HOME/bin && nano kafka-run-class-eki-config-zookeeper
+
+----------------------------
+# Which java to use
+#if [ -z "$JAVA_HOME" ]; then
+#  JAVA="java"
+#else
+#  JAVA="$JAVA_HOME/bin/java"
+#fi
+----------------------------
+
+# Which java to use EKI CONFIG
+if [ -z "$JAVA_11_MANUAL_CLONE1_HOME" ]; then
+  JAVA="java"
+else
+  JAVA="$JAVA_11_MANUAL_CLONE1_HOME/bin/java"
+fi
+----------------------------
+
+
+cd /MANUAL_JAVA/DOWNLOADS && git clone https://github.com/prometheus/jmx_exporter
+cp -avr ./jmx_exporter/example_configs/kafka-2_0_0.yml ./../JMX_PROMETHEUS/
+cp -avr ./jmx_exporter/example_configs/zookeeper.yaml ./../JMX_PROMETHEUS/
+
+=========================== JGN AMBIL LANGSUNG HRS GIT CLONE =========================== 
+cd /MANUAL_JAVA/DOWNLOADS && curl -L -o zookeeper.yaml https://github.com/prometheus/jmx_exporter/blob/master/example_configs/zookeeper.yaml && \
+cp -avr /MANUAL_JAVA/DOWNLOADS/zookeeper.yaml /MANUAL_JAVA/JMX_PROMETHEUS/zookeeper.yaml
+=========================== / JGN AMBIL LANGSUNG HRS GIT CLONE =========================== 
+
+
+cd $CONFLUENT_HOME/bin && nano zookeeper-server-start
+
+#EXTRA_ARGS="-javaagent:/MANUAL_JAVA/JMX_JAR/ZOOKEEPER/jmx_prometheus_javaagent-0.14.0.jar=8181:/MANUAL_JAVA/JMX_PROMETHEUS/zookeeper.yaml"
+EXTRA_ARGS="-javaagent:/MANUAL_JAVA/JMX_PROMETHEUS/jmx_prometheus_javaagent-0.14.0-clone1.jar=8181:/MANUAL_JAVA/JMX_PROMETHEUS/zookeeper.yaml"
+EXTRA_ARGS=${EXTRA_ARGS-'-name zookeeper -loggc'}
+
+
+
+
+cd $CONFLUENT_HOME/bin && nano zookeeper-server-start
+#exec $base_dir/kafka-run-class $EXTRA_ARGS org.apache.zookeeper.server.quorum.QuorumPeerMain "$@"
+exec $base_dir/kafka-run-class-eki-config-zookeeper $EXTRA_ARGS org.apache.zookeeper.server.quorum.QuorumPeerMain "$@"
+
+
+
+$JAVA_11_MANUAL_CLONE1_HOME/bin/java \
+-Xmx256M \
+-Dcom.sun.management.jmxremote \
+-Dcom.sun.management.jmxremote.authenticate=false  \
+-Dcom.sun.management.jmxremote.ssl=false \
+-javaagent:/MANUAL_JAVA/JMX_JAR/ZOOKEEPER/jmx_prometheus_javaagent-0.14.0.jar=8181:/MANUAL_JAVA/JMX_PROMETHEUS/zookeeper.yaml
+
+
+
+
+
+
+
+================ / ZOOKEEPER JMX_EXPORTER ================ 
+
+================ KAFKA JMX_EXPORTER ================ 
+
+cd /MANUAL_JAVA/DOWNLOADS && git clone https://github.com/prometheus/jmx_exporter
+cp -avr ./jmx_exporter/example_configs/kafka-2_0_0.yml ./../JMX_PROMETHEUS/
+cp -avr ./jmx_exporter/example_configs/zookeeper.yaml ./../JMX_PROMETHEUS/
+
+=========================== JGN AMBIL LANGSUNG HRS GIT CLONE =========================== 
+cd /MANUAL_JAVA/DOWNLOADS && curl -L -o kafka-2_0_0.yml https://github.com/prometheus/jmx_exporter/blob/master/example_configs/kafka-2_0_0.yml && \
+cp -avr /MANUAL_JAVA/DOWNLOADS/kafka-2_0_0.yml /MANUAL_JAVA/JMX_PROMETHEUS/kafka-2_0_0.yml
+=========================== / JGN AMBIL LANGSUNG HRS GIT CLONE =========================== 
+
+cd $CONFLUENT_HOME/bin && nano kafka-run-class-eki-config-kafka 
+----------------------------
+# Which java to use
+#if [ -z "$JAVA_HOME" ]; then
+#  JAVA="java"
+#else
+#  JAVA="$JAVA_HOME/bin/java"
+#fi
+----------------------------
+
+# Which java to use EKI CONFIG
+if [ -z "$JAVA_11_MANUAL_CLONE2_HOME" ]; then
+  JAVA="java"
+else
+  JAVA="$JAVA_11_MANUAL_CLONE2_HOME/bin/java"
+fi
+----------------------------
+# classpath for support jars with LSB-style layout
+CLASSPATH="$CLASSPATH":"/usr/share/java/support-metrics-client/*"     <<<<<<< setelah ini tambah
+
+KAFKA_OPTS="-javaagent:/MANUAL_JAVA/JMX_PROMETHEUS/jmx_javaagent-0.14.0-clone2.jar=8282:/MANUAL_JAVA/JMX_PROMETHEUS/kafka-2_0_0.yml"
+----------------------------
+
+cd $CONFLUENT_HOME/bin && nano kafka-server-start
+
+#exec $base_dir/kafka-run-class $EXTRA_ARGS kafka.Kafka "$@"
+exec $base_dir/kafka-run-class-eki-config-kafka $EXTRA_ARGS kafka.Kafka "$@"
+
+
+
+================ / KAFKA JMX_EXPORTER ================ 
+
+
+
+================ CONNECT GANTI JAVA BIAR JALAN ================ 
+
+
+
+================ CONNECT GANTI JAVA BIAR JALAN ================ 
+
+
+
+
+confluent local services start
+confluent local services zookeeper start
+confluent local services zookeeper log
+confluent local services kafka-server start
+
+confluent local services connect start
+confluent local services control-center start
+confluent local services control-center log
+
+
+
+==============================DONE =========================
+
+
+
+
+========================PROMETHEUS  NODE EXPORTER
+https://devopscube.com/monitor-linux-servers-prometheus-node-exporter/
+
+====Setup Node Exporter Binary
+cd /home/DL_FILES
+curl -LO https://github.com/prometheus/node_exporter/releases/download/v1.0.1/node_exporter-1.0.1.linux-amd64.tar.gz
+
+tar xvfz node_exporter-1.0.1.linux-amd64.tar.gz
+
+
+mv /home/DL_FILES/node_exporter-1.0.1.linux-amd64/node_exporter /usr/local/bin/
+
+
+//============ NOT USE 
+sudo mv node_exporter-1.0.1.linux-amd64 prometheus-node_exporter-files && cd prometheus-node_exporter-files
+cd ..
+
+cp -avr prometheus-node_exporter-files/node_exporter /usr/local/bin/
+//============ NOT USE 
+
+
+====Create a Custom Node Exporter Service
+--Create a node_exporter user to run the node exporter service.
+sudo useradd -rs /bin/false node_exporter
+
+--Create a node_exporter service file under systemd.
+nano /etc/systemd/system/node_exporter.service
+
+--Add the following service file content to the service file and save it.
+[Unit]
+Description=Node Exporter
+After=network.target
+
+[Service]
+User=node_exporter
+Group=node_exporter
+Type=simple
+ExecStart=/usr/local/bin/node_exporter
+
+[Install]
+WantedBy=multi-user.target
+
+
+
+--Reload the system daemon and star the node exporter service.
+sudo systemctl daemon-reload
+sudo systemctl start node_exporter
+
+--check the node exporter status to make sure it is running in the active state.
+sudo systemctl status node_exporter
+
+--Enable the node exporter service to the system startup.
+sudo systemctl enable node_exporter
+
+--Now, node exporter would be exporting metrics on port 9100. 
+http://<YOUR_IP_X>:9100/metrics
+
+
+
+
+
+
+
+
+
+===Configure the Server as Target on Prometheus Server  
+
+nano /etc/prometheus/prometheus.yml
+
+
+global:
+   scrape_interval: 15s
+scrape_configs:
+  - job_name: 'prometheus'
+    scrape_interval: 5s
+    static_configs:
+       - targets: ['<YOUR_IP_XXX>:9090']
+
+  - job_name: 'node_exporter'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['<YOUR_IP_XXX>:9100', 'IP_ADDR#2:9100', 'IP_ADDR#3:9100']
+
+  - job_name: 'node_exporter_server_confluent'
+    static_configs:
+    - targets: ['<YOUR_IP_X>:9100']
+
+  - job_name: 'jmx_exporter_zookeeper'
+    static_configs:
+    - targets: ['<YOUR_IP_X>:8181']
+
+  - job_name: 'jmx_exporter_kafka'
+    static_configs:
+    - targets: ['<YOUR_IP_X>:8282']
+
+
+--Restart the prometheus service for the configuration changes to take place.
+
+systemctl restart prometheus
+
+http://<YOUR_IP_X>:9090/targets
+
+--Following are the few key node metrics you can use to find its statistics.
+node_memory_MemFree_bytes
+node_cpu_seconds_total
+node_filesystem_avail_bytes
+rate(node_cpu_seconds_total{mode="system"}[1m]) 
+rate(node_network_receive_bytes_total[1m])
+
+========================PROMETHEUS  NODE EXPORTER
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
